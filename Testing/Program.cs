@@ -11,7 +11,16 @@ namespace Testing
     {
         static void Main(string[] args)
         {
-            // код
+            List<string> list = new List<string>();
+
+            list.Add("Привет");
+            list.Add(" мой друг!");
+            list.Add(" Как поживаешь?\n");
+
+            foreach(var n in list)
+            {
+                Console.Write(n);
+            }
         }
     }
 }
