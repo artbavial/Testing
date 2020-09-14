@@ -1,26 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Testing
 {
+
     class Program
     {
         static void Main(string[] args)
         {
-            List<string> list = new List<string>();
-
-            list.Add("Привет");
-            list.Add(" мой друг!");
-            list.Add(" Как поживаешь?\n");
-
-            foreach(var n in list)
+            while (true)
             {
-                Console.Write(n);
+                string txt = Console.ReadLine();
+
+                switch (txt)
+                {
+                    case "Привет":
+                        Console.WriteLine("И тебе привет!");
+                        break;
+                    case "Как дела?":
+                        Console.WriteLine("Спасибо, хорошо!");
+                        break;
+                    default:
+                        Console.WriteLine("Такой команды нет.");
+                        break;
+                }
             }
+
         }
+        
     }
 }
