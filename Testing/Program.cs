@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Runtime.Remoting.Services;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using HtmlAgilityPack;
+using Microsoft.EntityFrameworkCore.Internal;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Crypto.Tls;
 
 namespace Testing
 {
@@ -17,27 +24,40 @@ namespace Testing
     {
         static void Main(string[] args)
         {
-            string connectDataBase = "server=localhost;uid=root;database=testdb;password=########";
+            var parser = ParserTheSite("//h1[@class='index-main-news__article-title']").Distinct();
+            
 
-            MySqlConnection connect = new MySqlConnection(connectDataBase);
-
-            connect.Open();
-
-            for (int x = 1; x <= 7; x++)
+           foreach (string el in parser)
             {
-                string sqlQuery = $"SELECT name FROM tabledb WHERE id = {x}";
-
-                MySqlCommand command = new MySqlCommand(sqlQuery, connect);
-
-                string name = command.ExecuteScalar().ToString();
-
-                Console.WriteLine(name);
+                
+                Console.WriteLine(el);
             }
 
-            connect.Close();
-
             Console.ReadKey();
+            
         }
-        
+        public static string DownloadSite(string url_site)
+        {
+            WebClient wc = new WebClient();
+            wc.Encoding = Encoding.UTF8;
+
+            string str_html = wc.DownloadString(url_site);
+
+            return str_html;
+        }
+
+        public static IEnumerable<string> ParserTheSite(string xpath)
+        {
+            var htmlDoc = new HtmlDocument();
+
+            htmlDoc.LoadHtml(DownloadSite("http://inosmi.ru"));
+
+            foreach(HtmlNode html in htmlDoc.DocumentNode.SelectNodes(xpath))
+            {
+                yield return html.InnerText;
+            }
+
+        }
+
     }
 }
